@@ -1,0 +1,7 @@
+[12-Jun-2018 13:47:08 Europe/Stockholm] PHP Fatal error:  Uncaught PrestaShopException: The delivery address country is not active. in /home/hstrom/public_html/forlag/override/classes/PaymentModule.php:165
+Stack trace:
+#0 /home/hstrom/public_html/forlag/modules/hipscheckout/controllers/front/validation.php(570): PaymentModule->validateOrder(13, '2', 430, 'Hips checkout', NULL, Array, NULL, false, '85588e63d4b0fb5...')
+#1 /home/hstrom/public_html/forlag/modules/hipscheckout/controllers/front/validation.php(382): hipscheckoutvalidationModuleFrontController->postProcess()
+#2 /home/hstrom/public_html/forlag/modules/hipscheckout/validation.php(38): hipscheckoutvalidationModuleFrontController->postProcessWithoutCart('13')
+#3 {main}
+  thrown in /home/hstrom/public_html/forlag/override/classes/PaymentModule.php on line 165
