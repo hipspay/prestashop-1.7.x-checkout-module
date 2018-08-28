@@ -401,7 +401,7 @@ class HipsCheckoutAPI
             "checkout_settings": {
                 "extended_cart": true
             },
-            "require_shipping":' . ($post_values['require_shipping'] ? 'true' : 'true') . ',
+            "require_shipping":' . ($post_values['require_shipping'] ? 'true' : 'false') . ',
             "hooks":{      
              "user_return_url_on_success":"' . $post_values['redirectConformation'] .'?id_cart='.$post_values['cart_id'] . '",
              "user_return_url_on_fail":"' . $post_values['redirectFailed'] . '",

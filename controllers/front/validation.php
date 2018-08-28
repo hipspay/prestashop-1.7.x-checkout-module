@@ -289,25 +289,14 @@ class hipscheckoutvalidationModuleFrontController extends ModuleFrontController
                     //$x_amount = $viewOrderResp['total_payments_amount'] / 100;
 
                     $total = $x_amount;
-                    
+
                     $shippingTaxExcl = (float) $viewOrderResp['shipping']['fee'] / 100 - (float) $viewOrderResp['shipping']['vat'] / 100;
                     $shippingTaxIncl = (float) $viewOrderResp['shipping']['fee'] / 100;
                     $id_carrier_ps = $this->identifyCarrier($viewOrderResp['shipping']['id'], $viewOrderResp);
-                    
+
                     $hips->validateOrder(
-                            (int) ($cart->id), 
-                            $hips->hips_type == 'AUTH_ONLY' ? $hips->hips_auth_status : _PS_OS_PAYMENT_, 
-                            $total, 
-                            $hips->displayName, 
-                            null, array(), 
-                            null, 
-                            false, 
-                            $this->context->cart->secure_key,
-                            null,
-                            $shippingTaxIncl,
-                            $shippingTaxExcl,
-                            $id_carrier_ps);
-                    
+                            (int) ($cart->id), $hips->hips_type == 'AUTH_ONLY' ? $hips->hips_auth_status : _PS_OS_PAYMENT_, $total, $hips->displayName, null, array(), null, false, $this->context->cart->secure_key, null, $shippingTaxIncl, $shippingTaxExcl, $id_carrier_ps);
+
 
                     $order = new Order((int) ($hips->currentOrder));
 
@@ -330,9 +319,9 @@ class hipscheckoutvalidationModuleFrontController extends ModuleFrontController
                         $orderPayment->amount = $viewOrderResp['total_payments_amount'] / 100;
                         $orderPayment->update();
                     }
-                    
+
                     $this->updateOrderCarrier($order->id, $id_carrier_ps, (float) ($viewOrderResp['shipping']['fee'] / 100), (float) (($viewOrderResp['shipping']['fee'] - $viewOrderResp['shipping']['vat']) / 100));
-                                             
+
 
 
                     $order_invoice = new OrderInvoice((int) $order->invoice_number);
@@ -347,7 +336,7 @@ class hipscheckoutvalidationModuleFrontController extends ModuleFrontController
                     $order_invoice->total_shipping_tax_excl = $order->total_shipping_tax_excl;
                     $order_invoice->total_shipping_tax_incl = $order->total_shipping_tax_incl;
                     $order_invoice->update();
-                        
+
                     $message = new Message();
                     $message->message = ($hips->hips_type == 'AUTH_ONLY' ? $hips->l('Authorization Only - ') : '') .
                             $hips->l('Order Token ID: ') .
@@ -479,7 +468,7 @@ class hipscheckoutvalidationModuleFrontController extends ModuleFrontController
                 SELECT `id_order_carrier`
                 FROM `' . _DB_PREFIX_ . 'order_carrier`
                 WHERE `id_order` = ' . (int) $id_order . '');
-        
+
 
         if ($id_order_carrier) {
             $order_carrier = new OrderCarrier($id_order_carrier);
@@ -558,7 +547,7 @@ class hipscheckoutvalidationModuleFrontController extends ModuleFrontController
 
                     $id_order = (int) $id_order_ps;
 
-                   
+
                     if (!isset($id_order_ps) || empty($id_order_ps)) {
                         $customer = new Customer();
 
@@ -685,20 +674,9 @@ class hipscheckoutvalidationModuleFrontController extends ModuleFrontController
                         $shippingTaxExcl = (float) $viewOrderResp['shipping']['fee'] / 100 - (float) $viewOrderResp['shipping']['vat'] / 100;
                         $shippingTaxIncl = (float) $viewOrderResp['shipping']['fee'] / 100;
                         $id_carrier_ps = $this->identifyCarrier($viewOrderResp['shipping']['id'], $viewOrderResp);
-                       
+
                         $hips->validateOrder(
-                                (int) ($cart->id), 
-                                $hips->hips_type == 'AUTH_ONLY' ? $hips->hips_auth_status : _PS_OS_PAYMENT_, 
-                                $total, 
-                                $hips->displayName, 
-                                null, array(), 
-                                null, 
-                                false, 
-                                $this->context->cart->secure_key,
-                                null,
-                                $shippingTaxIncl,
-                                $shippingTaxExcl,
-                                $id_carrier_ps);
+                                (int) ($cart->id), $hips->hips_type == 'AUTH_ONLY' ? $hips->hips_auth_status : _PS_OS_PAYMENT_, $total, $hips->displayName, null, array(), null, false, $this->context->cart->secure_key, null, $shippingTaxIncl, $shippingTaxExcl, $id_carrier_ps);
 
                         $order = new Order((int) ($hips->currentOrder));
 
@@ -712,7 +690,7 @@ class hipscheckoutvalidationModuleFrontController extends ModuleFrontController
                         $order->total_paid_tax_incl = (float) $viewOrderResp['total_payments_amount'] / 100;
                         $order->total_paid = $order->total_paid_tax_incl;
 
-                        
+
 
                         $order->id_carrier = $id_carrier_ps;
 
@@ -727,12 +705,12 @@ class hipscheckoutvalidationModuleFrontController extends ModuleFrontController
 
 
                         $this->updateOrderCarrier($order->id, $id_carrier_ps, (float) ($viewOrderResp['shipping']['fee'] / 100), (float) (($viewOrderResp['shipping']['fee'] - $viewOrderResp['shipping']['vat']) / 100));
-                                             
+
 
 
                         $order_invoice = new OrderInvoice((int) $order->invoice_number);
-                        
-                        
+
+
                         $order_invoice->total_discount_tax_excl = $order->total_discounts_tax_excl;
                         $order_invoice->total_discount_tax_incl = $order->total_discounts_tax_incl;
                         $order_invoice->total_paid_tax_excl = $order->total_paid_tax_excl;
@@ -742,7 +720,7 @@ class hipscheckoutvalidationModuleFrontController extends ModuleFrontController
                         $order_invoice->total_shipping_tax_excl = $order->total_shipping_tax_excl;
                         $order_invoice->total_shipping_tax_incl = $order->total_shipping_tax_incl;
                         $order_invoice->update();
-                        
+
                         $message = new Message();
                         $message->message = ($hips->hips_type == 'AUTH_ONLY' ? $hips->l('Authorization Only - ') : '') .
                                 $hips->l('Order Token ID: ') .
@@ -1019,7 +997,6 @@ class hipscheckoutvalidationModuleFrontController extends ModuleFrontController
         $cookie = $context->cookie;
 
 
-
         $address_delivery = new Address((int) $cart->id_address_delivery);
         $address_billing = new Address((int) $cart->id_address_invoice);
         $customer = new Address();
@@ -1117,7 +1094,6 @@ class hipscheckoutvalidationModuleFrontController extends ModuleFrontController
             'country' => $billingCountry->iso_code,
             'ip_address' => $ip_address,
             'id_customer' => $cart->id_customer,
-            'require_shipping' => $require_shipping,
             'shipping_address_firstname' => $address_delivery->firstname,
             'shipping_address_lastname' => $address_delivery->lastname,
             'shipping_address_addr' => !empty($address_delivery->address1) ? $address_delivery->address1 : $address_delivery->address2,
@@ -1130,6 +1106,11 @@ class hipscheckoutvalidationModuleFrontController extends ModuleFrontController
         );
 
         $products = $cart->getProducts();
+
+
+        $available_discounts = $hips->getCartRulesTaxCloud($cart->id, $cart->id_lang);
+        $freeShippingCartRule = false;
+
         $cartProducts = array();
         foreach ($products as $product) {
             $name = $product['name'];
@@ -1159,7 +1140,7 @@ class hipscheckoutvalidationModuleFrontController extends ModuleFrontController
                 "sku" => $product['reference'],
                 "name" => $name,
                 "quantity" => $product['cart_quantity'],
-                "unit_price" => number_format($product['price_wt'], 2, '.', '') * 100,
+                "unit_price" => $product['price_wt'], // number_format($product['price_wt'], 2, '.', '') * 100,
                 "discount_rate" => 0,
                 "weight" => $product['weight'],
                 "weight_unit" => $hipsUnit,
@@ -1167,6 +1148,7 @@ class hipscheckoutvalidationModuleFrontController extends ModuleFrontController
                 "meta_data_1" => (isset($product['attributes']) ? $product['attributes'] : '')
             ];
         }
+
         $id_carrier = $context->cart->id_carrier;
         $carrier = new Carrier((int) $id_carrier);
 
@@ -1188,8 +1170,143 @@ class hipscheckoutvalidationModuleFrontController extends ModuleFrontController
           "vat_amount" => number_format($carrier_tax, 2, '.', '') * 100,
           ]; */
 
+	$freeShippingCartRule = false;
+        foreach ($available_discounts as $available_discount) {
+            $cartRule = new CartRule($available_discount['id_cart_rule']);
+            /* Free Shipping discount added */
+            
+            if ($cartRule->free_shipping == 1) {
+                $freeShippingCartRule = true;
+            }
+            /* Cart rule - reduction % */
+            if ($cartRule->reduction_percent > 0 && $cartRule->reduction_amount == 0) {
+                /* Need to see on which products the reduction percent must be applied */
+
+                // Discount (%) on the whole order
+                if ($cartRule->reduction_percent && $cartRule->reduction_product == 0) {
+                    foreach ($cartProducts as &$product) {
+                        $product['unit_price'] = Tools::ps_round(($product['unit_price'] * (100 - $cartRule->reduction_percent)) / 100, 2);
+                    }
+                }
+
+                // Discount (%) on a specific product
+                if ($cartRule->reduction_percent && $cartRule->reduction_product > 0) {
+                    //echo $cartRule->reduction_product;
+                    foreach ($cartProducts as &$product) {
+                        if ($product['id_product'] == $cartRule->reduction_product) {
+                            $product['unit_price'] = Tools::ps_round(($product['unit_price'] * (100 - $cartRule->reduction_percent)) / 100, 2);
+                        }
+                    }
+                }
+
+                // Discount (%) on the cheapest product
+                if ($cartRule->reduction_percent && $cartRule->reduction_product == -1) {
+                    $minPrice = false;
+                    $cheapest_product = null;
+                    $i = 0;
+                    foreach ($cartProducts as &$product) {
+                        $price = $product['unit_price'];
+                        if ($price > 0 && ($minPrice === false || $minPrice > $price)) {
+                            $minPrice = $price;
+                            $cheapest_product = $i; //$product['id_product'] . '_' . $product['id_product_attribute'];
+                        }
+                        $i++;
+                    }
+                    $j = 0;
+                    foreach ($cartProducts as &$product) {
+                        if (isset($cheapest_product)) {
+                            if ($cheapest_product == $j)
+                                $product['unit_price'] = Tools::ps_round(($product['unit_price'] * (100 - $cartRule->reduction_percent)) / 100, 2);
+                        }
+                        $j++;
+                    }
+                }
+
+                // Discount (%) on the selection of products
+                if ($cartRule->reduction_percent && $cartRule->reduction_product == -2) {
+                    $productRestriction = $this->checkProductRestrictions($available_discount['id_cart_rule'], $virtual_context, true, false);
+                    //print_r($productRestriction);
+                    if (isset($productRestriction) && !empty($productRestriction))
+                        foreach ($productRestriction as $productRestrict) {
+                            foreach ($cartProducts as $k => &$product) {
+
+
+                                if ((int) $product['id_product'] . '-' . (int) $product['id_product_attribute'] == $productRestrict) {
+
+                                    $discount = $product['unit_price'] - Tools::ps_round(($product['unit_price'] * (100 - $cartRule->reduction_percent)) / 100, 2);
+                                    //$cartProductsAvailable[(int) $product['id_product'] . '_' . (int) $product['id_product_attribute']]['price_per_unit'] = Tools::ps_round($product['price'] - $discount, 2);
+                                    //Tools::ps_round(($product['price'] * (100 - $cartRule->reduction_percent)) / 100, 2);
+                                    //$product['price'] = $product['price'] - $discount;
+
+                                    $cartProducts[$k]['unit_price'] = $product['unit_price'] - $discount;
+                                    //$product['orig_price']
+                                }
+                            }
+                        }
+                }
+            }
+            /* Cart rule - reduction amount on Specific Product */
+            $first = false;
+            if ($cartRule->reduction_amount > 0 && $cartRule->reduction_percent == 0) {
+                if ($cartRule->reduction_product > 0) {
+                    if (isset($cartProducts) && !empty($cartProducts)) {
+                        foreach ($cartProducts as &$product) {
+                            if ((int) $product['id_product'] == $cartRule->reduction_product && !$first) {
+                                $product['unit_price'] = Tools::ps_round($product['unit_price'] - ($cartRule->reduction_amount / $product['quantity']), 2);
+                                $reductionProduct = (int) $product['id_product'] . '_' . (int) $product['id_product_attribute'];
+                                $first = true;
+                                //break;
+                                //echo  (int)$product['id_product'].'_'.(int)$product['id_product_attribute'].' ---- '.Tools::ps_round($product['price']- $cartRule->reduction_amount , 2).'<br/>';
+                                //break;
+                            }
+                        }
+                    }
+                } else {
+                    /* Reduction amount */
+                    /* Convert reduction amount to % */
+                    /* Compute total products */
+                    $totalProducts = 0;
+                    if (isset($cartProducts) && !empty($cartProducts)) {
+                        foreach ($cartProducts as $productReduct) {
+                            $totalProducts = $totalProducts + $productReduct['unit_price'] * $productReduct['quantity'];
+                        }
+                    }
+
+                    if (isset($cartProducts) && !empty($cartProducts))
+                        $reduction_percent = (100 * $cartRule->reduction_amount) / $totalProducts;
+
+                    /* Apply discount to all products */
+                    if (isset($cartProducts) && !empty($cartProducts))
+                        foreach ($cartProducts as &$productReduct) {
+                            $productReduct['unit_price'] = Tools::ps_round(($productReduct['unit_price'] * (100 - $reduction_percent)) / 100, 2);
+                        }
+                }
+            }
+
+            /* Free gift products fix */
+            if (isset($cartRule->gift_product) && !empty($cartRule->gift_product)) {
+                if (isset($cartProducts) && !empty($cartProducts)) {
+                    foreach ($cartProducts as &$cartProduct) {
+                        if ((int) $cartRule->gift_product . '_' . (int) $cartRule->gift_product_attribute == (int) $cartProduct['id_product'] . '_' . (int) $cartProduct['id_product_attribute']) {
+                            $cartProduct['unit_price'] = 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach ($cartProducts as &$cartProduct) {
+            $cartProduct['unit_price'] = number_format($cartProduct['unit_price'], 2, '.', '') * 100;
+        }
+
         $post_values['cartProducts'] = $cartProducts;
         $post_values['secure_key'] = $hips->hips_secure_key;
+
+        if (isset($freeShippingCartRule) && $freeShippingCartRule) {
+            $post_values['require_shipping'] = false;
+        } else {
+            $post_values['require_shipping'] = true;
+        }
         $hipsAPI = new HipsCheckoutAPI($hips->hips_private, $hips->hips_public);
 
 
